@@ -5,6 +5,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { RoleModule } from './role/role.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { OrganizationModule } from './organization/organization.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -13,7 +15,9 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     RoleModule,
+    OrganizationModule,
     NoopAnimationsModule,
   ],
   providers: [],

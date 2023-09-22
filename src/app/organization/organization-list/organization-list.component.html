@@ -4,7 +4,7 @@
             <td>
                 <a
                     class="flex items-center justify-between py-2 text-2xl tracking-wide outline-none transition-[color,padding-left] duration-300 ease-in-out">
-                    <span>All Roles</span>
+                    <span>All Organization</span>
                 </a>
             </td>
             <td class="mt-2 flex justify-end">
@@ -13,7 +13,7 @@
                         <tr>
                 
                             <td>
-                                <i (click)="addRole(0)" class="fa-solid fa-circle-plus text-2xl cursor-pointer mr-3 fa-icon-color-one">add</i>
+                                <i (click)="addOrganization(0)" class="fa-solid fa-circle-plus text-2xl cursor-pointer mr-3 fa-icon-color-one">add</i>
                                 <a [matMenuTriggerFor]="leadSearchMenu"><i
                                         class="fa-solid fa-filter text-2xl cursor-pointer  fa-icon-color-two"></i></a>
                                 <mat-menu #leadSearchMenu="matMenu" (click)="$event.stopPropagation()">
