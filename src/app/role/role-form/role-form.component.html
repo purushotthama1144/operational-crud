@@ -1,0 +1,28 @@
+<h2 mat-dialog-title>{{role_id==0?'Add Role':'Update Role'}}</h2>
+<hr class="h-px border-0 bg-gray-700" />
+<mat-dialog-content class="mat-typography">
+    <form [formGroup]="roleForm" novalidate enctype="multipart/form-data">
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4">
+            <div class="col-span-4">
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Name</mat-label>
+                    <input matInput [type]="'text'" autocomplete="off" formControlName="name" placeholder="Role name"
+                        maxlength="255" />
+                </mat-form-field>
+            </div>
+            <div class="" *ngFor="let permission of permissions">
+                <input type="checkbox" [value]="permission['id']" [checked]="checkboxCheckOrUnchecked(permission['id'])"
+                    (change)="onChecklistWithInputBoxChange($event)" id="check_box{{permission['id']}}" />
+                &nbsp;&nbsp;<label for="check_box{{permission['id']}}"
+                    class="cursor-pointer mt-1 mr-2"><span>{{permission['name']}}</span></label>
+            </div>
+
+        </div>
+    </form>
+</mat-dialog-content>
+<hr class="h-px border-0 bg-gray-700" />
+<mat-dialog-actions align="end">
+    <button mat-raised-button [mat-dialog-close]="true">Cancel</button>
+    <button mat-raised-button color="primary" class="text-white" [disabled]="!roleForm.valid"
+        (click)="createRole(roleForm.value)">Save</button>
+</mat-dialog-actions>

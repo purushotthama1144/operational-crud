@@ -1,0 +1,87 @@
+<div class="card px-2 py-1">
+    <table class="w-full">
+        <tr>
+            <td>
+                <a
+                    class="flex items-center justify-between py-2 text-2xl tracking-wide outline-none transition-[color,padding-left] duration-300 ease-in-out">
+                    <span>All Roles</span>
+                </a>
+            </td>
+            <td class="mt-2 flex justify-end">
+                <div>
+                    <table>
+                        <tr>
+                
+                            <td>
+                                <i (click)="addRole(0)"
+                                    class="fa-solid fa-circle-plus text-2xl cursor-pointer mr-3 fa-icon-color-one"></i>
+                                <a [matMenuTriggerFor]="leadSearchMenu"><i
+                                        class="fa-solid fa-filter text-2xl cursor-pointer  fa-icon-color-two"></i></a>
+                                <mat-menu #leadSearchMenu="matMenu" (click)="$event.stopPropagation()">
+                                    <form [formGroup]="roleListForm" class="p-2" (click)="$event.stopPropagation()">
+                                        <table class="w-full">
+                                            <tr>
+                                                <td>
+                                                    <mat-form-field appearance="outline" style="width: 200px">
+                                                        <input matInput placeholder="Search...." />
+                                                    </mat-form-field>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td align="right">
+                                                    <button mat-raised-button color="primary"
+                                                        class="mat-icon-size mr-2">
+                                                        <i class="fa-solid fa-magnifying-glass text-white"></i>
+                                                    </button>
+
+                                                    <button mat-raised-button color="primary" class="mat-icon-size">
+                                                        <i class="fa-solid fa-arrows-rotate text-white"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </form>
+                                </mat-menu>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="card mt-2 p-2">
+
+    <div class="card-device-height">
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:gap-6 p-4">
+            <ng-container>
+                <ng-container *ngFor="let role of roles">
+                    <div class="card items-center justify-between shadow-2xl lg:flex-row border-[1px] border-[#4758B8]">
+                        <div
+                            class="flex flex-col items-center p-4 text-center sm:p-5 lg:flex-row lg:space-x-4 lg:text-left">
+                            <div class="mt-2 lg:mt-0">
+                                <div class="flex items-center justify-center space-x-1">
+                                    <h4 class="line-clamp-1 text-base font-medium">
+                                        {{ role["name"] }}
+                                        <button (click)="editRole(role, role['id'], role['name'])"
+                                            class="btn hidden h-6 rounded-full px-2 text-xs font-medium text-primary hover:bg-primary/20 focus:bg-primary/20 active:bg-primary/25 dark:text-accent-light dark:hover:bg-accent-light/20 dark:focus:bg-accent-light/20 dark:active:bg-accent-light/25 lg:inline-flex">
+                                            Edit</button><br />
+                                        <div class="mt-4">
+                                            <div
+                                                class="mt-2 grid grid-cols-1 gap-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4">
+                                                <ng-container *ngFor="let permission of role['permissions']">
+                                                    <div class="text-xs+">{{ permission["name"] }}</div>
+                                                </ng-container>
+                                            </div>
+                                        </div>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </ng-container>
+        </div>
+    </div>
+</div>
