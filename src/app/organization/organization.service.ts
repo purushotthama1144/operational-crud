@@ -11,7 +11,15 @@ export class OrganizationService {
 
   constructor(private http: HttpClient) {}
 
-  getOrganizationList(data:any): Observable<any> {
-    return this.http.post(`${this.baseUrl}micro-organization/list/` , data)
+  getOrganizationList(): Observable<any> {
+    return this.http.post(`${this.baseUrl}micro-organization/list/` , '' )
+  }
+
+  orgAdd(data:any): Observable<any> {
+    return this.http.post(`${this.baseUrl}micro-organization/create/` , data )
+  }
+
+  orgUpdate(data:any): Observable<any> {
+    return this.http.put(`${this.baseUrl}micro-organization/update/` , data )
   }
 }

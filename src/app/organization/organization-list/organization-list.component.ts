@@ -4,6 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { RoleFormComponent } from 'src/app/role/role-form/role-form.component';
+import { OrganizationService } from '../organization.service';
+import { OrganizationFormComponent } from '../organization-form/organization-form.component';
 
 @Component({
   selector: 'app-organization-list',
@@ -12,7 +14,7 @@ import { RoleFormComponent } from 'src/app/role/role-form/role-form.component';
 })
 export class OrganizationListComponent implements OnInit {
 
-  roles = [];
+  organizations = [];
   role_count: number = -1;
   page: number = 1;
   permissions: string[] = [];
@@ -27,46 +29,64 @@ export class OrganizationListComponent implements OnInit {
     private _cdref: ChangeDetectorRef,
     public sanitizer: DomSanitizer,
     public router: Router,
+    private organizationService : OrganizationService
   ) {}
 
   ngOnInit(): void {
-
+    this.fetchList()
   }
 
   addOrganization(params: number) {
-    const dilogRef = this.dialog.open(RoleFormComponent, {
+    const dilogRef = this.dialog.open(OrganizationFormComponent, {
       disableClose: true,
       data: {
-        permissions: this.permissions,
-        role_id: params,
-        role: [],
-        role_name: '',
+        organization_id: params,
+        organization: [],
+        organization_name: '',
       },
     });
     dilogRef.afterClosed().subscribe((data) => {
-    
+      this.fetchList()
     });
   }
 
-  editRole(role: string[], param: number, role_name: string) {
-    const permission_arr = JSON.parse(JSON.stringify(role))['permissions'];
-    let permission_list_from_database = [];
-    for (let per of permission_arr) {
-      permission_list_from_database.push(per.id);
-    }
-
-    const dilogRef = this.dialog.open(RoleFormComponent, {
+  editRole(organization: string[], param: number, organization_name: string , 
+    organization_state:string , 
+    organization_country:string,
+    organization_city:string) {
+    console.log(organization)
+    
+    const dilogRef = this.dialog.open(OrganizationFormComponent, {
       disableClose: true,
       data: {
-        permissions: this.permissions,
-        role_id: param,
-        role: permission_list_from_database,
-        role_name: role_name,
+        organization_id: param,
+        organization_name:organization_name,
+        organization_state: organization_state,
+        organization_country: organization_country,
+        organization_city: organization_city,
+        organization: organization,
       },
     });
     dilogRef.afterClosed().subscribe((data) => {
-
+      this.fetchList()
     });
+  }
+
+  fetchList() {
+    this.organizationService.getOrganizationList().subscribe((data) => {
+      console.log(data);
+      this.organizations = [
+        ...new Map(
+          this.organizations.concat(data['results']).map((item) => [item['id'], item])
+        ).values(),
+      ];
+      console.log(this.organizations)
+      this.role_count = data['count'];
+      this._cdref.detectChanges();
+    });
+    // this.organizationService.getOrganizationList().subscribe((data:any) => {
+    //   console.log(data)
+    // })
   }
 
 }

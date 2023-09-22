@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { RoleFormComponent } from 'src/app/role/role-form/role-form.component';
+import { OrganizationService } from '../organization.service';
 
 @Component({
   selector: 'app-organization-form',
@@ -21,54 +22,66 @@ export class OrganizationFormComponent implements OnInit {
   permission_list: number[] = [];
   checked_value!: number;
   role: number[] = [];
-  role_id: number;
-  permissions_come_from_api = [];
+  organization_id: number;
+  organization_name:string = "";
+  organization_state:string = "";
+  organization_country:string = "";
+  organization_city:string = "";
+
   constructor(
     public dialogRef: MatDialogRef<RoleFormComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
     private router: Router,
     private _cdr: ChangeDetectorRef,
+    private organizationService: OrganizationService
   ) {
-    this.permissions = data.permissions;
-    this.role = data.role;
-    this.role_id = data.role_id;
+    this.role = data;
+    this.organization_id = data.organization_id;
+    this.organization_name = data.organization_name;
+    console.log(this.organization_name)
+    this.organization_city = data.organization_city;
+    this.organization_state = data.organization_state;
+    this.organization_country = data.organization_country;
   }
 
   ngOnInit() {
     this.organizationForm = new FormGroup({
-      name: new FormControl('', [Validators.required]),
-      permission_list_field: new FormControl('', [Validators.required]),
-      role_id: new FormControl(this.role_id)
+      organizationId: new FormControl(this.organization_id),
+      name: new FormControl("", [Validators.required]),
+      city:new FormControl("", [Validators.required]),
+      state:new FormControl("", [Validators.required]),
+      country:new FormControl("", [Validators.required]),
     });
-    if (this.role_id != 0) {
-      this.permission_list = this.data.role;
+    if (this.organization_id != 0) {
       this.organizationForm.patchValue({
-        name: this.data.role_name,
-        permission_list_field: JSON.stringify(this.data.role),
+        name: this.organization_name,
+        city: this.organization_city,
+        state: this.organization_state,
+        country: this.organization_country
       });
     }
   }
 
-  createRole(ngForm: NgForm) {
-   
-    // if (this.role_id == 0) {
-    //   this.roleSubmitSubscription = this.roleService
-    //     .roleCreate(ngForm)
-    //     .subscribe((response) => {
-    //       this.dialogRef.close();
-    //       this._cdr.detectChanges();
-    //       this.spinner.hide();
-    //     });
-    // } else {
-    //   console.log(ngForm);
-    //   this.roleSubmitSubscription = this.roleService
-    //     .roleUpdate(ngForm)
-    //     .subscribe((response) => {
-    //       this.dialogRef.close();
-    //       this._cdr.detectChanges();
-    //       this.spinner.hide();
-    //     });
-    // }
+  createOrganization(ngForm: NgForm) {
+    if (this.organization_id == 0) {
+      console.log(ngForm)
+      this.roleSubmitSubscription = this.organizationService
+        .orgAdd(ngForm)
+        .subscribe((response) => {
+          this.dialogRef.close();
+          console.log(response)
+          this._cdr.detectChanges();
+        });
+    } else {
+      console.log(ngForm);
+      this.roleSubmitSubscription = this.organizationService
+        .orgUpdate(ngForm)
+        .subscribe((response) => {
+          console.log(response)
+          this.dialogRef.close();
+          this._cdr.detectChanges();
+        });
+    }
   }
 
   ngOnDestroy() {
