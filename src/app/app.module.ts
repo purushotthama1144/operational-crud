@@ -8,6 +8,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { OrganizationModule } from './organization/organization.module';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { TokenInterceptor } from './token-interceptor';
+import { BranchModule } from './branch/branch.module';
+import { DepartmentModule } from './department/department.module';
 
 @NgModule({
   declarations: [
@@ -16,10 +18,12 @@ import { TokenInterceptor } from './token-interceptor';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    NoopAnimationsModule,
     HttpClientModule,
     RoleModule,
     OrganizationModule,
-    NoopAnimationsModule,
+    BranchModule,
+    DepartmentModule,
   ],
   providers: [
     {

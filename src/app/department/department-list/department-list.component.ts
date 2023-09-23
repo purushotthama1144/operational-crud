@@ -3,18 +3,16 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Router } from '@angular/router';
-import { RoleFormComponent } from 'src/app/role/role-form/role-form.component';
-import { OrganizationService } from '../organization.service';
-import { OrganizationFormComponent } from '../organization-form/organization-form.component';
+import { DepartmentFormComponent } from '../department-form/department-form.component';
+import { DepartmentService } from '../department.service';
 
 @Component({
-  selector: 'app-organization-list',
-  templateUrl: './organization-list.component.html',
-  styleUrls: ['./organization-list.component.scss']
+  selector: 'app-department-list',
+  templateUrl: './department-list.component.html',
+  styleUrls: ['./department-list.component.scss']
 })
-export class OrganizationListComponent implements OnInit {
-
-  organizations = [];
+export class DepartmentListComponent implements OnInit {
+  departments = [];
   role_count: number = -1;
   page: number = 1;
 
@@ -28,15 +26,15 @@ export class OrganizationListComponent implements OnInit {
     private _cdref: ChangeDetectorRef,
     public sanitizer: DomSanitizer,
     public router: Router,
-    private organizationService : OrganizationService
+    private departmentService : DepartmentService
   ) {}
 
   ngOnInit(): void {
     this.fetchList()
   }
 
-  addOrganization(params: number) {
-    const dilogRef = this.dialog.open(OrganizationFormComponent, {
+  addDepartment(params: number) {
+    const dilogRef = this.dialog.open(DepartmentFormComponent, {
       disableClose: true,
       data: {
         organization_id: params,
@@ -49,13 +47,13 @@ export class OrganizationListComponent implements OnInit {
     });
   }
 
-  editOrganization(organization: string[], param: number, organization_name: string , 
+  editDepartment(organization: string[], param: number, organization_name: string , 
     organization_state:string , 
     organization_country:string,
     organization_city:string) {
     console.log(organization)
     
-    const dilogRef = this.dialog.open(OrganizationFormComponent, {
+    const dilogRef = this.dialog.open(DepartmentFormComponent, {
       disableClose: true,
       data: {
         organization_id: param,
@@ -71,9 +69,9 @@ export class OrganizationListComponent implements OnInit {
     });
   }
 
-  deleteOrganization(organizationId:number) {
+  deleteDepartment(organizationId:number) {
     console.log(organizationId)
-    this.organizationService.orgDelete(organizationId).subscribe((data) => {
+    this.departmentService.departmentDelete(organizationId).subscribe((data:any) => {
       console.log(data)
       if(data){
         this.fetchList()
@@ -82,17 +80,20 @@ export class OrganizationListComponent implements OnInit {
   }
 
   fetchList() {
-    this.organizationService.getOrganizationList().subscribe((data) => {
+    const payload = {
+      'organization':1,
+      'branch':1
+    }
+    this.departmentService.getDepartmentList(payload).subscribe((data:any) => {
       console.log(data);
-      this.organizations = [
+      this.departments = [
         ...new Map(
-          this.organizations.concat(data['results']).map((item) => [item['id'], item])
+          this.departments.concat(data['results']).map((item) => [item['id'], item])
         ).values(),
       ];
-      console.log(this.organizations)
+      console.log(this.departments)
       this.role_count = data['count'];
       this._cdref.detectChanges();
     });
   }
-
 }

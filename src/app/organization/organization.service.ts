@@ -22,4 +22,8 @@ export class OrganizationService {
   orgUpdate(data:any): Observable<any> {
     return this.http.put(`${this.baseUrl}micro-organization/update/` , data )
   }
+
+  orgDelete(data:any): Observable<any> {
+    return this.http.post(`${this.baseUrl}micro-organization/delete/` , data )
+  }
 }

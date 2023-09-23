@@ -4,7 +4,7 @@
             <td>
                 <a
                     class="flex items-center justify-between py-2 text-2xl tracking-wide outline-none transition-[color,padding-left] duration-300 ease-in-out">
-                    <span>All Organization</span>
+                    <span>All Department</span>
                 </a>
             </td>
             <td class="mt-2 flex justify-end">
@@ -17,7 +17,7 @@
                                   </mat-paginator>
                               </td> -->
                             <td>
-                                <i (click)="addOrganization(0)" class="fa-solid fa-circle-plus text-2xl cursor-pointer mr-3 fa-icon-color-one">add</i>
+                                <i (click)="addDepartment(0)" class="fa-solid fa-circle-plus text-2xl cursor-pointer mr-3 fa-icon-color-one">add</i>
                                 <a [matMenuTriggerFor]="leadSearchMenu"><i
                                         class="fa-solid fa-filter text-2xl cursor-pointer  fa-icon-color-two"></i></a>
                                 <mat-menu #leadSearchMenu="matMenu" (click)="$event.stopPropagation()">
@@ -59,38 +59,38 @@
     <div class="card-device-height">
         <div class="grid grid-cols-1 gap-2 sm:grid-cols-4 sm:gap-2 lg:gap-2 p-4">
             <ng-container>
-                <ng-container *ngFor="let organization of organizations">
+                <ng-container *ngFor="let department of departments">
                     <div class="card items-center justify-between shadow-2xl lg:flex-row border-[1px] border-[#4758B8]">
                         <div
                             class="flex flex-col items-center p-4 text-center sm:p-5 lg:flex-row lg:space-x-4 lg:text-left">
                             <div class="mt-2 lg:mt-0">
                                 <div class="flex items-center justify-center space-x-1">
                                     <h4 class="line-clamp-1 text-base font-medium">
-                                      {{ organization["name"] }}
+                                      {{ department["name"] }}
                                     </h4>
                                 </div>
                                 <div class="flex items-center space-x-1">
                                     City:  <h4 class="line-clamp-1 text-base font-medium">
-                                      {{ organization["city"] }}
+                                      {{ department["city"] }}
                                     </h4>
                                 </div>
                                 <div class="flex items-center space-x-1">
                                     State: <h4 class="line-clamp-1 text-base font-medium">
-                                       {{ organization["state"] }}
+                                       {{ department["state"] }}
                                     </h4>
                                 </div>
                                 <div class="flex items-center space-x-1">
                                     Country: <h4 class="line-clamp-1 text-base font-medium">
-                                      {{ organization["country"] }}
+                                      {{ department["country"] }}
                                     </h4>
                                 </div>
                             </div>
                         </div>
                         <div class="bg-gray-400 p-2 text-right">
-                            <button (click)="editOrganization(organization, organization['id'], organization['name'] , organization['state'] , organization['city'] , organization['country'])"
+                            <button (click)="editDepartment(department, department['id'], department['name'] , department['state'] , department['city'] , department['country'])"
                                                 class="btn bg-blue-500 hover:bg-blue-700 text-white hidden  py-1 rounded-full px-3 text-xs font-medium text-primary hover:bg-primary/20 focus:bg-primary/20 active:bg-primary/25 dark:text-accent-light dark:hover:bg-accent-light/20 dark:focus:bg-accent-light/20 dark:active:bg-accent-light/25 lg:inline-flex">
                                                 Edit</button>
-                            <button (click)="deleteOrganization(organization['id'])"
+                            <button (click)="deleteDepartment(department['id'])"
                                                 class="btn ml-2 bg-red-500 hover:bg-red-700 text-white hidden  py-1 rounded-full px-3 text-xs font-medium text-primary hover:bg-primary/20 focus:bg-primary/20 active:bg-primary/25 dark:text-accent-light dark:hover:bg-accent-light/20 dark:focus:bg-accent-light/20 dark:active:bg-accent-light/25 lg:inline-flex">
                                                 Delete</button>
                         </div>
