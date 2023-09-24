@@ -17,7 +17,7 @@ export class BranchListComponent implements OnInit {
   role_count: number = -1;
   page: number = 1;
 
-  roleListForm = new FormGroup({
+  branchListForm = new FormGroup({
     tenant_id: new FormControl(1),
     page: new FormControl(1),
   });
@@ -38,9 +38,7 @@ export class BranchListComponent implements OnInit {
     const dilogRef = this.dialog.open(BranchFormComponent, {
       disableClose: true,
       data: {
-        branch_id: params,
-        branch: [],
-        branch_name: '',
+        id: params,    
       },
     });
     dilogRef.afterClosed().subscribe((data) => {

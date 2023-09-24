@@ -13,10 +13,8 @@ import { DepartmentService } from '../department.service';
 })
 export class DepartmentListComponent implements OnInit {
   departments = [];
-  role_count: number = -1;
-  page: number = 1;
 
-  roleListForm = new FormGroup({
+  departmentListForm = new FormGroup({
     tenant_id: new FormControl(1),
     page: new FormControl(1),
   });
@@ -37,9 +35,7 @@ export class DepartmentListComponent implements OnInit {
     const dilogRef = this.dialog.open(DepartmentFormComponent, {
       disableClose: true,
       data: {
-        organization_id: params,
-        organization: [],
-        organization_name: '',
+        department_id: params,
       },
     });
     dilogRef.afterClosed().subscribe((data) => {
@@ -47,21 +43,13 @@ export class DepartmentListComponent implements OnInit {
     });
   }
 
-  editDepartment(organization: string[], param: number, organization_name: string , 
-    organization_state:string , 
-    organization_country:string,
-    organization_city:string) {
-    console.log(organization)
+  editDepartment(department:any , department_id:number) {
+    console.log(department)
     
     const dilogRef = this.dialog.open(DepartmentFormComponent, {
       disableClose: true,
       data: {
-        organization_id: param,
-        organization_name:organization_name,
-        organization_state: organization_state,
-        organization_country: organization_country,
-        organization_city: organization_city,
-        organization: organization,
+        department , department_id
       },
     });
     dilogRef.afterClosed().subscribe((data) => {
@@ -70,7 +58,6 @@ export class DepartmentListComponent implements OnInit {
   }
 
   deleteDepartment(organizationId:number) {
-    console.log(organizationId)
     this.departmentService.departmentDelete(organizationId).subscribe((data:any) => {
       console.log(data)
       if(data){
@@ -92,8 +79,6 @@ export class DepartmentListComponent implements OnInit {
         ).values(),
       ];
       console.log(this.departments)
-      this.role_count = data['count'];
-      this._cdref.detectChanges();
     });
   }
 }

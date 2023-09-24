@@ -13,15 +13,8 @@ import { OrganizationService } from '../organization.service';
 })
 export class OrganizationFormComponent implements OnInit {
   organizationForm!: FormGroup;
-  modules = {};
-  content = '';
-  preview: string = '';
-  loggedInUser!: number;
   roleSubmitSubscription!: Subscription;
-  permissions = [];
-  permission_list: number[] = [];
-  checked_value!: number;
-  role: number[] = [];
+  organization: number[] = [];
   organization_id: number;
   organization_name:string = "";
   organization_state:string = "";
@@ -31,14 +24,11 @@ export class OrganizationFormComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<RoleFormComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
-    private router: Router,
-    private _cdr: ChangeDetectorRef,
     private organizationService: OrganizationService
   ) {
-    this.role = data;
+    this.organization = data;
     this.organization_id = data.organization_id;
     this.organization_name = data.organization_name;
-    console.log(this.organization_name)
     this.organization_city = data.organization_city;
     this.organization_state = data.organization_state;
     this.organization_country = data.organization_country;
@@ -70,7 +60,6 @@ export class OrganizationFormComponent implements OnInit {
         .subscribe((response) => {
           this.dialogRef.close();
           console.log(response)
-          this._cdr.detectChanges();
         });
     } else {
       console.log(ngForm);
@@ -79,7 +68,6 @@ export class OrganizationFormComponent implements OnInit {
         .subscribe((response) => {
           console.log(response)
           this.dialogRef.close();
-          this._cdr.detectChanges();
         });
     }
   }
@@ -89,44 +77,4 @@ export class OrganizationFormComponent implements OnInit {
       this.roleSubmitSubscription.unsubscribe();
     }
   }
-
-  onChecklistWithInputBoxChange($event: Event) {
-    this.checked_value = parseInt(($event.target as HTMLInputElement)['value']);
-    if (($event.target as HTMLInputElement)['checked']) {
-      this.permission_list.push(this.checked_value);
-    } else {
-      this.removeFromArray(this.permission_list, this.checked_value);
-    }
-  
-    if (this.permission_list.length > 0) {
-      this.organizationForm.patchValue({
-        permission_list_field: JSON.stringify(this.permission_list),
-      });
-    } else {
-      this.organizationForm.patchValue({
-        permission_list_field: '',
-      });
-    }
-  }
-  removeFromArray(arr: any, checked_value: number) {
-    var what,
-      a = arguments,
-      L = a.length,
-      ax;
-    while (L > 1 && arr.length) {
-      what = a[--L];
-      while ((ax = arr.indexOf(what)) !== -1) {
-        arr.splice(ax, 1);
-      }
-    }
-    return arr;
-  }
-  checkboxCheckOrUnchecked(id: number) {
-    if (this.role.includes(id)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
 }

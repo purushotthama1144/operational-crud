@@ -11,8 +11,16 @@ export class DepartmentService {
 
   constructor(private http: HttpClient) {}
 
+  getOrganizationList(): Observable<any> {
+    return this.http.post(`${this.baseUrl}micro-organization/list/` , '' )
+  }
+
+  getBranchList(organization:any): Observable<any> {
+    return this.http.post(`${this.baseUrl}micro-branch/list/?page=1&page_size=10` , organization )
+  }
+
   getDepartmentList(data:any): Observable<any> {
-    return this.http.post(`${this.baseUrl}micro-department/list/` , data )
+    return this.http.post(`${this.baseUrl}micro-department/list/?page=1&page_size=10` , data )
   }
 
   departmentAdd(data:any): Observable<any> {

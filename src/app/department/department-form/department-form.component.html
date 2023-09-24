@@ -1,43 +1,37 @@
-<h2 mat-dialog-title>{{organization_id==0?'Add Organization':'Update Organization'}}</h2>
+<h2 mat-dialog-title>{{department_id==0?'Add Department':'Update Department'}}</h2>
 <hr class="h-px border-0 bg-gray-700" />
 <mat-dialog-content class="mat-typography">
-    <form [formGroup]="organizationForm" novalidate enctype="multipart/form-data">
+    <form [formGroup]="departmentForm" novalidate enctype="multipart/form-data">
         <div class="grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4">
             <div class="col-span-4">
+                <mat-form-field appearance="outline">
+                    <mat-label>Organization:</mat-label>
+                    <mat-select formControlName="organization" (selectionChange)="onchangeOrganization($event)">
+                        <mat-option *ngFor="let organization of organizationData" [value]="organization.id">{{ organization.name }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-span-4">
+                <mat-form-field appearance="outline">
+                    <mat-label>Branch:</mat-label>
+                    <mat-select formControlName="branch" (selectionChange)="onchangeBranch($event)">
+                        <mat-option *ngFor="let branch of branchData" [value]="branch.id">{{ branch.branch_name }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-span-4">
                 <mat-form-field appearance="outline" class="w-full">
-                    <mat-label>Name</mat-label>
-                    <input matInput [type]="'text'" autocomplete="off" formControlName="name" placeholder="Organization name"
+                    <mat-label>Department Name:</mat-label>
+                    <input matInput [type]="'text'" autocomplete="off" formControlName="title" placeholder="Organization name"
                         maxlength="255" />
                 </mat-form-field>
             </div>
-            <div class="col-span-4">
-                <mat-form-field appearance="outline" class="w-full">
-                    <mat-label>City</mat-label>
-                    <input matInput [type]="'text'" autocomplete="off" formControlName="city" placeholder="Organization city"
-                    maxlength="255" />
-                </mat-form-field>
-            </div>
-            <div class="col-span-4">
-                <mat-form-field appearance="outline" class="w-full">
-                    <mat-label>State</mat-label>
-                    <input matInput [type]="'text'" autocomplete="off" formControlName="state" placeholder="Organization state"
-                    maxlength="255" />
-                </mat-form-field>
-            </div>
-            <div class="col-span-4">
-                <mat-form-field appearance="outline" class="w-full">
-                    <mat-label>Country</mat-label>
-                    <input matInput [type]="'text'" autocomplete="off" formControlName="country" placeholder="Organization country"
-                        maxlength="255" />
-                </mat-form-field>
-            </div>
-
         </div>
     </form>
 </mat-dialog-content>
 <hr class="h-px border-0 bg-gray-700" />
 <mat-dialog-actions align="end">
     <button mat-raised-button [mat-dialog-close]="true">Cancel</button>
-    <button mat-raised-button color="primary" class="text-white" [disabled]="!organizationForm.valid"
-        (click)="createOrganization(organizationForm.value)">Save</button>
+    <button mat-raised-button color="primary" class="text-white" [disabled]="!departmentForm.valid"
+        (click)="createOrganization(departmentForm.value)">Save</button>
 </mat-dialog-actions>

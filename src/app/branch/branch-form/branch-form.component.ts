@@ -13,75 +13,95 @@ import { BranchService } from '../branch.service';
 })
 export class BranchFormComponent implements OnInit {
   branchForm!: FormGroup;
-  modules = {};
-  content = '';
-  preview: string = '';
   loggedInUser!: number;
   roleSubmitSubscription!: Subscription;
-  permissions = [];
-  permission_list: number[] = [];
-  checked_value!: number;
-  role: number[] = [];
-  branch_id: number;
-  branch_name:string = "";
-  branch_state:string = "";
-  branch_country:string = "";
-  branch_city:string = "";
+  organizationData:any;
+  Organization:any;
+  branchName:any;
+  branchId:any;
+  branchCode:any;
+  City:any;
+  State:any;
+  Country:any;
 
   constructor(
     public dialogRef: MatDialogRef<RoleFormComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
-    private router: Router,
-    private _cdr: ChangeDetectorRef,
     private branchService: BranchService
   ) {
-    this.role = data;
-    this.branch_id = data.branch_id;
-    this.branch_name = data.branch_name;
-    console.log(this.branch_name)
-    this.branch_city = data.branch_city;
-    this.branch_state = data.branch_state;
-    this.branch_country = data.branch_country;
+    if(data.id == 0) {
+      this.branchId = data.id
+    } else {
+      this.Organization = data.branch.organization;
+      this.branchName = data.branch.branch_name
+      this.branchId = data.branch.id
+      this.branchCode = data.branch.branch_code
+      this.City = data.branch.city
+      this.State = data.branch.state
+      this.Country = data.branch.country
+
+    }
+    console.log(data)
   }
 
   ngOnInit() {
+    this.organizationList();
     this.branchForm = new FormGroup({
-      organization: new FormControl(1),
-      branchId: new FormControl(1),
-      branchCode: new FormControl(1),
-      name: new FormControl("", [Validators.required]),
+      organization: new FormControl(Number),
+      branch_name: new FormControl("", [Validators.required]),
+      branch_id: new FormControl(Number),
+      branch_code: new FormControl(Number),
       city:new FormControl("", [Validators.required]),
       state:new FormControl("", [Validators.required]),
       country:new FormControl("", [Validators.required]),
     });
-    if (this.branch_id != 0) {
+    if (this.branchId != 0) {
       this.branchForm.patchValue({
-        name: this.branch_name,
-        city: this.branch_city,
-        state: this.branch_state,
-        country: this.branch_country
+        organization: this.Organization,
+        branch_name: this.branchName,
+        branch_id: this.branchId,
+        branch_code:this.branchCode,
+        city: this.City,
+        state: this.State,
+        country:this.Country,
       });
     }
   }
 
+  organizationList() {
+    this.branchService.getOrganizationList().subscribe((data) =>  {
+      this.organizationData = data.results;
+      
+      console.log(data)
+    })
+  }
+
+  onchangeOrganization(event:any) {
+    console.log(event.value)
+    if(this.branchId == 0) {
+        this.branchForm.controls['branch_name'].reset();
+        this.branchForm.controls['city'].reset();
+        this.branchForm.controls['state'].reset();
+        this.branchForm.controls['country'].reset();
+    }
+  }
+
   createBranch(ngForm: NgForm) {
-    if (this.branch_id == 0) {
-      console.log(ngForm)
+    console.log(ngForm)
+    if (this.branchId == 0) {
+
       this.roleSubmitSubscription = this.branchService
         .branchAdd(ngForm)
         .subscribe((response) => {
           this.dialogRef.close();
           console.log(response)
-          this._cdr.detectChanges();
         });
     } else {
-      console.log(ngForm);
       this.roleSubmitSubscription = this.branchService
         .branchUpdate(ngForm)
         .subscribe((response) => {
           console.log(response)
           this.dialogRef.close();
-          this._cdr.detectChanges();
         });
     }
   }
@@ -91,44 +111,4 @@ export class BranchFormComponent implements OnInit {
       this.roleSubmitSubscription.unsubscribe();
     }
   }
-
-  onChecklistWithInputBoxChange($event: Event) {
-    this.checked_value = parseInt(($event.target as HTMLInputElement)['value']);
-    if (($event.target as HTMLInputElement)['checked']) {
-      this.permission_list.push(this.checked_value);
-    } else {
-      this.removeFromArray(this.permission_list, this.checked_value);
-    }
-  
-    if (this.permission_list.length > 0) {
-      this.branchForm.patchValue({
-        permission_list_field: JSON.stringify(this.permission_list),
-      });
-    } else {
-      this.branchForm.patchValue({
-        permission_list_field: '',
-      });
-    }
-  }
-  removeFromArray(arr: any, checked_value: number) {
-    var what,
-      a = arguments,
-      L = a.length,
-      ax;
-    while (L > 1 && arr.length) {
-      what = a[--L];
-      while ((ax = arr.indexOf(what)) !== -1) {
-        arr.splice(ax, 1);
-      }
-    }
-    return arr;
-  }
-  checkboxCheckOrUnchecked(id: number) {
-    if (this.role.includes(id)) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
 }

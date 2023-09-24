@@ -1,12 +1,20 @@
-<h2 mat-dialog-title>{{branch_id==0?'Add Branch':'Update Branch'}}</h2>
+<h2 mat-dialog-title>{{branchId==0?'Add Branch':'Update Branch'}}</h2>
 <hr class="h-px border-0 bg-gray-700" />
 <mat-dialog-content class="mat-typography">
     <form [formGroup]="branchForm" novalidate enctype="multipart/form-data">
         <div class="grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4">
             <div class="col-span-4">
+                <mat-form-field appearance="outline">
+                    <mat-label>Organization:</mat-label>
+                    <mat-select formControlName="organization" (selectionChange)="onchangeOrganization($event)">
+                        <mat-option *ngFor="let organization of organizationData" [value]="organization.id">{{ organization.name }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-span-4">
                 <mat-form-field appearance="outline" class="w-full">
                     <mat-label>Name</mat-label>
-                    <input matInput [type]="'text'" autocomplete="off" formControlName="name" placeholder="Branch name"
+                    <input matInput [type]="'text'" autocomplete="off" formControlName="branch_name" placeholder="Branch name"
                         maxlength="255" />
                 </mat-form-field>
             </div>

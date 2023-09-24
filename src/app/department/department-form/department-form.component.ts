@@ -12,74 +12,90 @@ import { DepartmentService } from '../department.service';
   styleUrls: ['./department-form.component.scss']
 })
 export class DepartmentFormComponent implements OnInit {
-  organizationForm!: FormGroup;
-  modules = {};
-  content = '';
-  preview: string = '';
-  loggedInUser!: number;
+  departmentForm!: FormGroup;
   roleSubmitSubscription!: Subscription;
-  permissions = [];
-  permission_list: number[] = [];
-  checked_value!: number;
-  role: number[] = [];
-  organization_id: number;
-  organization_name:string = "";
-  organization_state:string = "";
-  organization_country:string = "";
-  organization_city:string = "";
+  organizationData:any;
+  branchData:any;
+  title:string = '';
+  summary:string = "";
+  photo:any;
+  creatingUser:any;
+  organization:any;
+  branch:any;
+  department_id: any;
 
   constructor(
     public dialogRef: MatDialogRef<RoleFormComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
-    private router: Router,
-    private _cdr: ChangeDetectorRef,
+
     private departmentService: DepartmentService
   ) {
-    this.role = data;
-    this.organization_id = data.organization_id;
-    this.organization_name = data.organization_name;
-    console.log(this.organization_name)
-    this.organization_city = data.organization_city;
-    this.organization_state = data.organization_state;
-    this.organization_country = data.organization_country;
+    console.log(data)
+    this.department_id = data.department_id;
   }
 
   ngOnInit() {
-    this.organizationForm = new FormGroup({
-      organizationId: new FormControl(this.organization_id),
-      name: new FormControl("", [Validators.required]),
-      city:new FormControl("", [Validators.required]),
-      state:new FormControl("", [Validators.required]),
-      country:new FormControl("", [Validators.required]),
+    this.organizationList();
+    this.branchList();
+    this.departmentForm = new FormGroup({
+      title: new FormControl("" , [Validators.required]),
+      summary: new FormControl(""),
+      photo:new FormControl(""),
+      creatingUser:new FormControl(1),
+      organization:new FormControl(Number),
+      branch:new FormControl(Number),
+      department_id:new FormControl(1),
     });
-    if (this.organization_id != 0) {
-      this.organizationForm.patchValue({
-        name: this.organization_name,
-        city: this.organization_city,
-        state: this.organization_state,
-        country: this.organization_country
+    if (this.department_id != 0) {
+      this.departmentForm.patchValue({
+        title: this.data.department.department_title,
+        summary: "",
+        photo:"",
+        creatingUser:1,
+        organization:this.data.department.organization,
+        branch:this.data.department.branch,
+        department_id:1,
       });
     }
   }
 
+  onchangeOrganization(event:any) {
+    console.log(event.value)
+  }
+  onchangeBranch(event:any) {
+    console.log(event.value)
+  }
+
+  organizationList() {
+    this.departmentService.getOrganizationList().subscribe((data) =>  {
+      this.organizationData = data.results;
+      console.log(data)
+    })
+  }
+
+  branchList() {
+    const payload = {
+      organization: 1
+    }
+    this.departmentService.getBranchList(payload).subscribe((data) =>  {
+      this.branchData = data.results;
+      console.log(data)
+    })
+  }
+
   createOrganization(ngForm: NgForm) {
-    if (this.organization_id == 0) {
-      console.log(ngForm)
+    if (this.department_id == 0) {
       this.roleSubmitSubscription = this.departmentService
         .departmentAdd(ngForm)
         .subscribe((response) => {
           this.dialogRef.close();
           console.log(response)
-          this._cdr.detectChanges();
         });
     } else {
-      console.log(ngForm);
       this.roleSubmitSubscription = this.departmentService
         .departmentUpdate(ngForm)
         .subscribe((response) => {
-          console.log(response)
           this.dialogRef.close();
-          this._cdr.detectChanges();
         });
     }
   }
@@ -87,45 +103,6 @@ export class DepartmentFormComponent implements OnInit {
   ngOnDestroy() {
     if (this.roleSubmitSubscription) {
       this.roleSubmitSubscription.unsubscribe();
-    }
-  }
-
-  onChecklistWithInputBoxChange($event: Event) {
-    this.checked_value = parseInt(($event.target as HTMLInputElement)['value']);
-    if (($event.target as HTMLInputElement)['checked']) {
-      this.permission_list.push(this.checked_value);
-    } else {
-      this.removeFromArray(this.permission_list, this.checked_value);
-    }
-  
-    if (this.permission_list.length > 0) {
-      this.organizationForm.patchValue({
-        permission_list_field: JSON.stringify(this.permission_list),
-      });
-    } else {
-      this.organizationForm.patchValue({
-        permission_list_field: '',
-      });
-    }
-  }
-  removeFromArray(arr: any, checked_value: number) {
-    var what,
-      a = arguments,
-      L = a.length,
-      ax;
-    while (L > 1 && arr.length) {
-      what = a[--L];
-      while ((ax = arr.indexOf(what)) !== -1) {
-        arr.splice(ax, 1);
-      }
-    }
-    return arr;
-  }
-  checkboxCheckOrUnchecked(id: number) {
-    if (this.role.includes(id)) {
-      return true;
-    } else {
-      return false;
     }
   }
 }

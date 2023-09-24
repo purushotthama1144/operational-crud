@@ -21,7 +21,7 @@
                                 <a [matMenuTriggerFor]="leadSearchMenu"><i
                                         class="fa-solid fa-filter text-2xl cursor-pointer  fa-icon-color-two"></i></a>
                                 <mat-menu #leadSearchMenu="matMenu" (click)="$event.stopPropagation()">
-                                    <form [formGroup]="roleListForm" class="p-2" (click)="$event.stopPropagation()">
+                                    <form [formGroup]="departmentListForm" class="p-2" (click)="$event.stopPropagation()">
                                         <table class="w-full">
                                             <tr>
                                                 <td>
@@ -66,28 +66,13 @@
                             <div class="mt-2 lg:mt-0">
                                 <div class="flex items-center justify-center space-x-1">
                                     <h4 class="line-clamp-1 text-base font-medium">
-                                      {{ department["name"] }}
-                                    </h4>
-                                </div>
-                                <div class="flex items-center space-x-1">
-                                    City:  <h4 class="line-clamp-1 text-base font-medium">
-                                      {{ department["city"] }}
-                                    </h4>
-                                </div>
-                                <div class="flex items-center space-x-1">
-                                    State: <h4 class="line-clamp-1 text-base font-medium">
-                                       {{ department["state"] }}
-                                    </h4>
-                                </div>
-                                <div class="flex items-center space-x-1">
-                                    Country: <h4 class="line-clamp-1 text-base font-medium">
-                                      {{ department["country"] }}
+                                      {{ department["department_title"] }}
                                     </h4>
                                 </div>
                             </div>
                         </div>
                         <div class="bg-gray-400 p-2 text-right">
-                            <button (click)="editDepartment(department, department['id'], department['name'] , department['state'] , department['city'] , department['country'])"
+                            <button (click)="editDepartment(department , department['id'])"
                                                 class="btn bg-blue-500 hover:bg-blue-700 text-white hidden  py-1 rounded-full px-3 text-xs font-medium text-primary hover:bg-primary/20 focus:bg-primary/20 active:bg-primary/25 dark:text-accent-light dark:hover:bg-accent-light/20 dark:focus:bg-accent-light/20 dark:active:bg-accent-light/25 lg:inline-flex">
                                                 Edit</button>
                             <button (click)="deleteDepartment(department['id'])"
