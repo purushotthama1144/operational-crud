@@ -46,20 +46,13 @@ export class BranchListComponent implements OnInit {
     });
   }
 
-  editBranch(branch: string[], param: number, branch_name: string , 
-    branch_state:string , 
-    branch_country:string,
-    branch_city:string) {
+  editBranch(branch: any) {
     console.log(branch)
     
     const dilogRef = this.dialog.open(BranchFormComponent, {
       disableClose: true,
       data: {
-        branch_id: param,
-        branch_name:branch_name,
-        branch_state: branch_state,
-        branch_country: branch_country,
-        branch_city: branch_city,
+        id: branch.id,
         branch: branch,
       },
     });

@@ -14,12 +14,9 @@ import { OrganizationService } from '../organization.service';
 export class OrganizationFormComponent implements OnInit {
   organizationForm!: FormGroup;
   roleSubmitSubscription!: Subscription;
-  organization: number[] = [];
+  organization: any;
   organization_id: number;
-  organization_name:string = "";
-  organization_state:string = "";
-  organization_country:string = "";
-  organization_city:string = "";
+ 
 
   constructor(
     public dialogRef: MatDialogRef<RoleFormComponent>,
@@ -27,11 +24,8 @@ export class OrganizationFormComponent implements OnInit {
     private organizationService: OrganizationService
   ) {
     this.organization = data;
+    console.log(data, this.organization)
     this.organization_id = data.organization_id;
-    this.organization_name = data.organization_name;
-    this.organization_city = data.organization_city;
-    this.organization_state = data.organization_state;
-    this.organization_country = data.organization_country;
   }
 
   ngOnInit() {
@@ -44,10 +38,10 @@ export class OrganizationFormComponent implements OnInit {
     });
     if (this.organization_id != 0) {
       this.organizationForm.patchValue({
-        name: this.organization_name,
-        city: this.organization_city,
-        state: this.organization_state,
-        country: this.organization_country
+        name: this.organization.organization['name'],
+        city: this.organization.organization['city'],
+        state: this.organization.organization['state'],
+        country: this.organization.organization['country']
       });
     }
   }

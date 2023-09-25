@@ -43,13 +43,14 @@ export class DepartmentListComponent implements OnInit {
     });
   }
 
-  editDepartment(department:any , department_id:number) {
+  editDepartment(department:any) {
     console.log(department)
     
     const dilogRef = this.dialog.open(DepartmentFormComponent, {
       disableClose: true,
       data: {
-        department , department_id
+        department ,
+        department_id: department.id 
       },
     });
     dilogRef.afterClosed().subscribe((data) => {

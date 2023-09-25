@@ -19,29 +19,14 @@ export class BranchFormComponent implements OnInit {
   Organization:any;
   branchName:any;
   branchId:any;
-  branchCode:any;
-  City:any;
-  State:any;
-  Country:any;
 
   constructor(
     public dialogRef: MatDialogRef<RoleFormComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: any,
     private branchService: BranchService
   ) {
-    if(data.id == 0) {
-      this.branchId = data.id
-    } else {
-      this.Organization = data.branch.organization;
-      this.branchName = data.branch.branch_name
-      this.branchId = data.branch.id
-      this.branchCode = data.branch.branch_code
-      this.City = data.branch.city
-      this.State = data.branch.state
-      this.Country = data.branch.country
-
-    }
-    console.log(data)
+    this.Organization = data.branch;
+    this.branchId = data.id
   }
 
   ngOnInit() {
@@ -57,13 +42,13 @@ export class BranchFormComponent implements OnInit {
     });
     if (this.branchId != 0) {
       this.branchForm.patchValue({
-        organization: this.Organization,
-        branch_name: this.branchName,
-        branch_id: this.branchId,
-        branch_code:this.branchCode,
-        city: this.City,
-        state: this.State,
-        country:this.Country,
+        organization: this.Organization['organization'],
+        branch_name: this.Organization['branch_name'],
+        branch_id: this.Organization['id'],
+        branch_code: this.Organization['branch_code'],
+        city: this.Organization['city'],
+        state: this.Organization['state'],
+        country: this.Organization['country'],
       });
     }
   }
@@ -71,8 +56,6 @@ export class BranchFormComponent implements OnInit {
   organizationList() {
     this.branchService.getOrganizationList().subscribe((data) =>  {
       this.organizationData = data.results;
-      
-      console.log(data)
     })
   }
 
@@ -87,9 +70,7 @@ export class BranchFormComponent implements OnInit {
   }
 
   createBranch(ngForm: NgForm) {
-    console.log(ngForm)
     if (this.branchId == 0) {
-
       this.roleSubmitSubscription = this.branchService
         .branchAdd(ngForm)
         .subscribe((response) => {

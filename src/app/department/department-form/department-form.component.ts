@@ -69,7 +69,7 @@ export class DepartmentFormComponent implements OnInit {
   organizationList() {
     this.departmentService.getOrganizationList().subscribe((data) =>  {
       this.organizationData = data.results;
-      console.log(data)
+   
     })
   }
 
@@ -79,7 +79,7 @@ export class DepartmentFormComponent implements OnInit {
     }
     this.departmentService.getBranchList(payload).subscribe((data) =>  {
       this.branchData = data.results;
-      console.log(data)
+ 
     })
   }
 

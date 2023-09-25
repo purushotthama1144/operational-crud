@@ -40,8 +40,6 @@ export class OrganizationListComponent implements OnInit {
       disableClose: true,
       data: {
         organization_id: params,
-        organization: [],
-        organization_name: '',
       },
     });
     dilogRef.afterClosed().subscribe((data) => {
@@ -49,21 +47,12 @@ export class OrganizationListComponent implements OnInit {
     });
   }
 
-  editOrganization(organization: string[], param: number, organization_name: string , 
-    organization_state:string , 
-    organization_country:string,
-    organization_city:string) {
-    console.log(organization)
-    
+  editOrganization(organization: any) {
     const dilogRef = this.dialog.open(OrganizationFormComponent, {
       disableClose: true,
       data: {
-        organization_id: param,
-        organization_name:organization_name,
-        organization_state: organization_state,
-        organization_country: organization_country,
-        organization_city: organization_city,
-        organization: organization,
+        organization,
+        organization_id: organization.id
       },
     });
     dilogRef.afterClosed().subscribe((data) => {
